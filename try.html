@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Data Submission</title>
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      font-size: 20px;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    label {
+      margin-bottom: 10px;
+    }
+
+    input[type="text"] {
+      padding: 10px;
+      font-size: 18px;
+      width: 300px;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 18px;
+    }
+  </style>
+</head>
+<body>
+  <form id="dataForm">
+    <label>
+      Textbox 1:
+      <input type="text" name="textbox1" required>
+      <input type="checkbox" name="checkbox1">
+    </label>
+    <br>
+    <label>
+      Textbox 2:
+      <input type="text" name="textbox2" required>
+      <input type="checkbox" name="checkbox2">
+    </label>
+    <br>
+    <label>
+      Textbox 3:
+      <input type="text" name="textbox3" required>
+      <input type="checkbox" name="checkbox3">
+    </label>
+    <br>
+    <label>
+      Textbox 4:
+      <input type="text" name="textbox4" required>
+      <input type="checkbox" name="checkbox4">
+    </label>
+    <br>
+    <label>
+      Textbox 5:
+      <input type="text" name="textbox5" required>
+      <input type="checkbox" name="checkbox5">
+    </label>
+    <br>
+    <label>
+      Textbox 6:
+      <input type="text" name="textbox6" required>
+      <input type="checkbox" name="checkbox6">
+    </label>
+    <br>
+    <label>
+      Textbox 7:
+      <input type="text" name="textbox7" required>
+      <input type="checkbox" name="checkbox7">
+    </label>
+    <br>
+    <!-- Add more textbox and checkbox pairs as needed -->
+    <br>
+    <button type="button" onclick="submitData()">Submit</button>
+  </form>
+
+  <script>
+    function submitData() {
+  const form = document.getElementById('dataForm');
+  const formData = new FormData(form);
+
+  // Convert form data to JSON object
+  const jsonData = [];
+  for (let i = 1; i <= 7; i++) {
+    const checkboxName = `checkbox${i}`;
+    const checkbox = form.elements[checkboxName];
+    const isChecked = checkbox.checked;
+    const textboxName = `textbox${i}`;
+    const textboxValue = form.elements[textboxName].value;
+    
+    if (isChecked && textboxValue !== "") {
+      const entry = {
+        checkbox: checkboxName,
+        text: textboxValue
+      };
+      jsonData.push(entry);
+    }
+  }
+
+  // Make an HTTP POST request to the server
+  fetch('http://localhost:8000/api/submit', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(jsonData)
+  })
+  .then(response => {
+    if (response.ok) {
+      console.log('Data submitted successfully');
+    } else {
+      console.log('Failed to submit data');
+    }
+  })
+  .catch(error => {
+    console.error('Error:', error);
+  });
+}
+  </script>
+</body>
+</html>

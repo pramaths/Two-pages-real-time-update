@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>New Page</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f2f2f2;
+    }
+
+    h1 {
+      color: #333333;
+      text-align: center;
+      padding: 20px;
+    }
+
+    #dataContainer {
+      background-color: #ffffff;
+      padding: 10px;
+      margin: 20px auto;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      width: 50%; /* Adjust the width as needed */
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      padding: 8px;
+      text-align: left;
+      border-bottom: 1px solid #cccccc;
+    }
+
+    th {
+      background-color: #f9f9f9;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h1>New Page</h1>
+
+  <div id="dataContainer"></div>
+
+  <script>
+    function updateData(data) {
+      const dataContainer = document.getElementById('dataContainer');
+
+      while (dataContainer.firstChild) {
+        dataContainer.firstChild.remove();
+      }
+
+      const table = document.createElement('table');
+
+      // Create table headers
+      const thead = document.createElement('thead');
+      const headerRow = document.createElement('tr');
+      const checkboxHeader = document.createElement('th');
+      checkboxHeader.textContent = 'Checkbox';
+      const textHeader = document.createElement('th');
+      textHeader.textContent = 'Text';
+      headerRow.appendChild(checkboxHeader);
+      headerRow.appendChild(textHeader);
+      thead.appendChild(headerRow);
+      table.appendChild(thead);
+
+      // Create table body
+      const tbody = document.createElement('tbody');
+      data.forEach(item => {
+        const row = document.createElement('tr');
+        const checkboxCell = document.createElement('td');
+        checkboxCell.textContent = item.checkbox;
+        const textCell = document.createElement('td');
+        textCell.textContent = item.text;
+        row.appendChild(checkboxCell);
+        row.appendChild(textCell);
+        tbody.appendChild(row);
+      });
+      table.appendChild(tbody);
+
+      dataContainer.appendChild(table);
+    }
+
+    function fetchData() {
+      fetch('http://localhost:8000/api/data')
+        .then(response => response.json())
+        .then(data => {
+          updateData(data);
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        });
+    }
+
+    fetchData();
+
+    window.addEventListener('beforeunload', function() {
+      location.reload();
+    });
+  </script>
+</body>
+</html>
